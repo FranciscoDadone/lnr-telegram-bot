@@ -1,0 +1,27 @@
+version: '3.8'
+
+volumes:
+  datafiles:
+
+services:
+  bot:
+    container_name: telegram-bot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes: # Comment this lines for prod
+      - .:/home/node/app/
+      - ./nodemon.json:/home/node/app/nodemon.json
+    ports:
+      - 8080:8080
+    networks:
+      - network
+    command: npm run dev #node build/index.js
+
+networks:
+  network:
+    external:
+      name: lnr

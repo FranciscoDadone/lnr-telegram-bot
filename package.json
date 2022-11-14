@@ -13,10 +13,13 @@
     "prepare": "npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run lint",
-    "dev": "nodemon ./src/index.ts"
+    "dev": "nodemon ./index.ts",
+    "build": "tsc -p .",
+    "start": "NODE_PATH=./build node build/index.js"
   },
   "dependencies": {
     "dotenv": "^16.0.3",
-    "telebot": "^1.4.1"
+    "telebot": "^1.4.1",
+    "ts-node": "^10.9.1"
   }
 }
