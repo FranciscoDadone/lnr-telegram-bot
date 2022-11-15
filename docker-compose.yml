@@ -12,14 +12,46 @@ services:
     env_file:
       - .env
     restart: unless-stopped
-    volumes: # Comment this lines for prod
+    volumes:
       - .:/home/node/app/
       - ./nodemon.json:/home/node/app/nodemon.json
     ports:
       - 8080:8080
     networks:
       - network
-    command: npm run dev #node build/index.js
+    command: npm run dev
+    depends_on:
+      - mysql
+    links:
+      - mysql
+  
+  mysql:
+    image: mysql:8.0.0
+    container_name: mysql8-lnr
+    env_file:
+      - .env
+    volumes:
+      - datafiles:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - network
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-lnr
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: unless-stopped
+    ports:
+      - 3003:80
+    networks:
+      - network
 
 networks:
   network:
